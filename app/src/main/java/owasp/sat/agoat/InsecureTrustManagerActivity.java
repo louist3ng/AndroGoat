@@ -56,6 +56,9 @@ public class InsecureTrustManagerActivity extends AppCompatActivity {
         EditText urlField = findViewById(R.id.urlInput);
         TextView resultView = findViewById(R.id.resultView);
 
+        // Vulnerability: Tapjacking - disabling touch filtering (platform-9)
+        fetchButton.setFilterTouchesWhenObscured(false);
+
         fetchButton.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("HTTPS Request");
