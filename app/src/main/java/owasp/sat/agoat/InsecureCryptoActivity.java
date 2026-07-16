@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.SecureRandom;
 import java.util.Base64;
 
 public class InsecureCryptoActivity extends AppCompatActivity {
@@ -57,6 +58,10 @@ public class InsecureCryptoActivity extends AppCompatActivity {
                 // Vulnerability 5: IvParameterSpec with inline byte array
                 IvParameterSpec ivSpec2 = new IvParameterSpec(new byte[]{0x00, 0x01, 0x02, 0x03,
                         0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
+
+                // Vulnerability 6: Insecure RNG using SHA1PRNG
+                SecureRandom insecureRng = SecureRandom.getInstance("SHA1PRNG");
+                insecureRng.setSeed(hardcodedKey);
 
                 Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
                 cipher.init(Cipher.ENCRYPT_MODE, keySpec1, ivSpec);
