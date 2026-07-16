@@ -12,11 +12,15 @@ import javax.crypto.Cipher;
 import javax.crypto.NullCipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.security.Signature;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import javax.crypto.Mac;
 
 public class InsecureCryptoActivity extends AppCompatActivity {
 
@@ -93,6 +97,28 @@ public class InsecureCryptoActivity extends AppCompatActivity {
                 // Vulnerability 11: NullCipher - ciphertext identical to plaintext
                 NullCipher nullCipher = new NullCipher();
                 byte[] nullEncrypted = nullCipher.doFinal(plaintext.getBytes());
+
+                // Vulnerability 12: Cipher key reuse - same key for encrypt and decrypt (mstg-crypto-5)
+                Cipher reusedCipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+                reusedCipher.init(Cipher.ENCRYPT_MODE, keySpec1, ivSpec);
+                byte[] reusedEncrypted = reusedCipher.doFinal(plaintext.getBytes());
+                reusedCipher.init(Cipher.DECRYPT_MODE, keySpec1, ivSpec);
+
+                // Vulnerability 13: Mac key reuse (mstg-crypto-5)
+                Mac reusedMac = Mac.getInstance("HmacSHA256");
+                reusedMac.init(keySpec1);
+                reusedMac.doFinal(plaintext.getBytes());
+                reusedMac.init(keySpec1);
+
+                // Vulnerability 14: Signature key reuse (mstg-crypto-5)
+                KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+                kpg.initialize(2048);
+                KeyPair keyPair = kpg.generateKeyPair();
+                Signature reusedSig = Signature.getInstance("SHA256withRSA");
+                reusedSig.initSign(keyPair.getPrivate());
+                reusedSig.update(plaintext.getBytes());
+                reusedSig.sign();
+                reusedSig.initSign(keyPair.getPrivate());
 
                 Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
                 cipher.init(Cipher.ENCRYPT_MODE, keySpec1, ivSpec);
