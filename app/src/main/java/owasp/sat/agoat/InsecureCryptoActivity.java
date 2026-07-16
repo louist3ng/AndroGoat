@@ -67,9 +67,13 @@ public class InsecureCryptoActivity extends AppCompatActivity {
                 IvParameterSpec ivSpec2 = new IvParameterSpec(new byte[]{0x00, 0x01, 0x02, 0x03,
                         0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
 
-                // Vulnerability 6: Insecure RNG using SHA1PRNG
+                // Vulnerability 6a: Insecure RNG using SHA1PRNG
                 SecureRandom insecureRng = SecureRandom.getInstance("SHA1PRNG");
                 insecureRng.setSeed(hardcodedKey);
+
+                // Vulnerability 6b: SecureRandom with seed in constructor (mstg-crypto-6b)
+                byte[] staticSeed = "predictable_seed".getBytes();
+                SecureRandom seededRng = new SecureRandom(staticSeed);
 
                 // Vulnerability 7: Weak cipher algorithms stored in config map (mstg-crypto-4)
                 Map<String, String> cryptoConfig = new HashMap<>();
