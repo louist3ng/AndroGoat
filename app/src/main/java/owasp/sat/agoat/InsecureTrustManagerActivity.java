@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.net.http.SslError;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import java.security.cert.X509Certificate;
@@ -58,6 +59,13 @@ public class InsecureTrustManagerActivity extends AppCompatActivity {
 
         // Vulnerability: Tapjacking - disabling touch filtering (platform-9)
         fetchButton.setFilterTouchesWhenObscured(false);
+
+        // Vulnerability: WebView insecure storage settings (mstg-platform-10)
+        WebView webView = new WebView(this);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setAppCacheEnabled(true);
+        webSettings.setDatabaseEnabled(true);
 
         fetchButton.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
