@@ -125,6 +125,10 @@
             android:name=".ClipboardActivity"
             android:label="@string/clipboard" />
         <activity
+            android:name=".InsecureTrustManagerActivity"
+            android:exported="false"
+            android:label="@string/insecureTrustManager" />
+        <activity
             android:name=".InsecureCryptoActivity"
             android:exported="false"
             android:label="@string/insecureCrypto" />

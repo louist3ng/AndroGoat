@@ -56,6 +56,8 @@ If you are looking to learn Android Application Security Testing then AndroGoat 
     <string name="github">Code is Available at <a href="https://github.com/satishpatnayak/AndroGoat">Github (https://github.com/satishpatnayak/AndroGoat) </a>  </string>
     <string name="mail">For any suggestions and feedback please <a href="mailto://satishkumarpatnayak@live.com?Subject=AndroGoat - Suggestions and Feedback">satishkumarpatnayak@live.com</a></string>
     <string name="twitter">Follow me on <a href="https://twitter.com/satish_patnayak">Twitter (https://twitter.com/satish_patnayak) </a></string>
+    <string name="insecureTrustManager">Insecure TrustManager</string>
+    <string name="InsecureTrustManagerHint"><b>Objectives:</b> \n 1. Understand what a custom TrustManager is \n 2. Identify how trust-all TrustManagers bypass SSL certificate validation \n 3. Vulnerable Code \n 4. Risk associated with it</string>
     <string name="insecureCrypto">Insecure Cryptography</string>
     <string name="InsecureCryptoHint"><b>Objectives:</b> \n 1. Understand why hardcoded cryptographic keys are insecure \n 2. Identify hardcoded SecretKeySpec and IvParameterSpec usage \n 3. Vulnerable Code \n 4. Risk associated with it</string>
     <string name="localWrite">Local File Write</string>

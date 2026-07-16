@@ -56,6 +56,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, BinaryPatchingActivity::class.java))
         }
 
+        val insecureTrustManager = findViewById<Button>(R.id.InsecureTrustManager)
+        insecureTrustManager.setOnClickListener {
+            startActivity(Intent(this, InsecureTrustManagerActivity::class.java))
+        }
+
         val insecureCrypto = findViewById<Button>(R.id.InsecureCrypto)
         insecureCrypto.setOnClickListener {
             startActivity(Intent(this, InsecureCryptoActivity::class.java))
