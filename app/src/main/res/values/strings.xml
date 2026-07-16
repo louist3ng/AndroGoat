@@ -56,5 +56,7 @@ If you are looking to learn Android Application Security Testing then AndroGoat 
     <string name="github">Code is Available at <a href="https://github.com/satishpatnayak/AndroGoat">Github (https://github.com/satishpatnayak/AndroGoat) </a>  </string>
     <string name="mail">For any suggestions and feedback please <a href="mailto://satishkumarpatnayak@live.com?Subject=AndroGoat - Suggestions and Feedback">satishkumarpatnayak@live.com</a></string>
     <string name="twitter">Follow me on <a href="https://twitter.com/satish_patnayak">Twitter (https://twitter.com/satish_patnayak) </a></string>
+    <string name="localWrite">Local File Write</string>
+    <string name="LocalWriteHint"><b>Objectives:</b> \n 1. Understand how sensitive data (credentials, API keys) can be written to local files using Writer and OutputStream \n 2. Identify the vulnerable code that stores plaintext credentials \n 3. Vulnerable Code \n 4. Risk associated with it</string>
     <string name="you_won_game">You won the game</string>
 </resources>

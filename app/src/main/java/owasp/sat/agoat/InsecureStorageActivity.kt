@@ -34,5 +34,10 @@ class InsecureStorageActivity : AppCompatActivity() {
         sDcardButton.setOnClickListener {
             startActivity(Intent(this, InsecureStorageSDCardActivity::class.java))
         }
+
+        val localWriteButton = findViewById<Button>(R.id.localWriteButton)
+        localWriteButton.setOnClickListener {
+            startActivity(Intent(this, InsecureStorageLocalWriteActivity::class.java))
+        }
     }
 }
