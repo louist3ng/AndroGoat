@@ -124,6 +124,11 @@ public class InsecureCryptoActivity extends AppCompatActivity {
                 reusedSig.sign();
                 reusedSig.initSign(keyPair.getPrivate());
 
+                // Vulnerability 15: RSA without OAEP padding (rsa_cipher_without_oaep_padding)
+                Cipher rsaCipher1 = Cipher.getInstance("RSA");
+                Cipher rsaCipher2 = Cipher.getInstance("RSA/ECB/NoPadding");
+                Cipher rsaCipher3 = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+
                 Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
                 cipher.init(Cipher.ENCRYPT_MODE, keySpec1, ivSpec);
                 byte[] encrypted = cipher.doFinal(plaintext.getBytes());
