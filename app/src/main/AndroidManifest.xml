@@ -122,6 +122,10 @@
             android:name=".ClipboardActivity"
             android:label="@string/clipboard" />
         <activity
+            android:name=".InsecureCryptoActivity"
+            android:exported="false"
+            android:label="@string/insecureCrypto" />
+        <activity
             android:name=".InsecureStorageLocalWriteActivity"
             android:exported="false"
             android:label="@string/localWrite" />

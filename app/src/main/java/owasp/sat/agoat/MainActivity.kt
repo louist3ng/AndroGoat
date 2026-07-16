@@ -56,6 +56,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, BinaryPatchingActivity::class.java))
         }
 
+        val insecureCrypto = findViewById<Button>(R.id.InsecureCrypto)
+        insecureCrypto.setOnClickListener {
+            startActivity(Intent(this, InsecureCryptoActivity::class.java))
+        }
+
         val biopath = findViewById<Button>(R.id.bioauth1)
         biopath.setOnClickListener {
             startActivity(Intent(this, BioMetricAuthActivity::class.java))
