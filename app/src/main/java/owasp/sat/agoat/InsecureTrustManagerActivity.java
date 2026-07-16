@@ -8,6 +8,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.http.SslError;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import java.security.cert.X509Certificate;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -18,6 +22,13 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 public class InsecureTrustManagerActivity extends AppCompatActivity {
+
+    // Vulnerability: WebViewClient that ignores SSL errors (mstg-network-3b)
+    private class InsecureWebViewClient extends WebViewClient {
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            handler.proceed();
+        }
+    }
 
     // Vulnerability: Custom TrustManager that trusts all certificates (mstg-network-3a)
     private static final TrustManager[] TRUST_ALL_CERTS = new TrustManager[]{
