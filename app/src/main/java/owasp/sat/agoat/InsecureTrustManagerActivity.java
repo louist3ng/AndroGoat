@@ -14,8 +14,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import java.security.cert.X509Certificate;
+import java.security.cert.CertificateException;
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.BufferedReader;
@@ -31,15 +34,13 @@ public class InsecureTrustManagerActivity extends AppCompatActivity {
         }
     }
 
-    // Vulnerability: Custom TrustManager that trusts all certificates (mstg-network-3a)
+    // Vulnerability: Custom TrustManager with empty checkServerTrusted (empty_check_server_trusted)
     private static final TrustManager[] TRUST_ALL_CERTS = new TrustManager[]{
             new X509TrustManager() {
                 public void checkClientTrusted(X509Certificate[] chain, String authType) {
-                    // Empty: accepts any client certificate
                 }
 
-                public void checkServerTrusted(X509Certificate[] chain, String authType) {
-                    // Empty: accepts any server certificate
+                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
                 }
 
                 public X509Certificate[] getAcceptedIssuers() {
@@ -47,6 +48,19 @@ public class InsecureTrustManagerActivity extends AppCompatActivity {
                 }
             }
     };
+
+    // Vulnerability: HostnameVerifier that accepts any hostname (trust_all_hostname_verifier_class)
+    private static final HostnameVerifier TRUST_ALL_HOSTS = new HostnameVerifier() {
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
+        }
+    };
+
+    // Vulnerability: Desugared lambda hostname verifier (trust_all_hostname_verifier_lambda_desugared)
+    public static boolean verifyHost(String hostname, SSLSession session) {
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +88,7 @@ public class InsecureTrustManagerActivity extends AppCompatActivity {
                 SSLContext sslContext = SSLContext.getInstance("TLS");
                 sslContext.init(null, TRUST_ALL_CERTS, new java.security.SecureRandom());
                 HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+                HttpsURLConnection.setDefaultHostnameVerifier(TRUST_ALL_HOSTS);
 
                 URL url = new URL(urlField.getText().toString());
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
