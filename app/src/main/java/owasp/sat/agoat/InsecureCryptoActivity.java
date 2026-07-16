@@ -9,10 +9,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import javax.crypto.Cipher;
+import javax.crypto.NullCipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 public class InsecureCryptoActivity extends AppCompatActivity {
 
@@ -62,6 +66,33 @@ public class InsecureCryptoActivity extends AppCompatActivity {
                 // Vulnerability 6: Insecure RNG using SHA1PRNG
                 SecureRandom insecureRng = SecureRandom.getInstance("SHA1PRNG");
                 insecureRng.setSeed(hardcodedKey);
+
+                // Vulnerability 7: Weak cipher algorithms stored in config map (mstg-crypto-4)
+                Map<String, String> cryptoConfig = new HashMap<>();
+                cryptoConfig.put("ecbCipher", "AES/ECB/PKCS5Padding");
+                cryptoConfig.put("desCipher", "DES/CBC/PKCS5Padding");
+                cryptoConfig.put("tripleDesCipher", "DESede/3DES/NoPadding");
+                cryptoConfig.put("rc4Cipher", "RC4/None/NoPadding");
+                cryptoConfig.put("blowfishCipher", "Blowfish/BLOWFISH/PKCS5Padding");
+                cryptoConfig.put("hashAlgo", "MD5/digest");
+                cryptoConfig.put("legacyHash", "SHA1/digest");
+                cryptoConfig.put("rc2Cipher", "RC2/CBC/PKCS5Padding");
+
+                // Vulnerability 8: Using ECB mode cipher
+                Cipher ecbCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                ecbCipher.init(Cipher.ENCRYPT_MODE, keySpec1);
+
+                // Vulnerability 9: Using DES weak cipher
+                SecretKeySpec desKey = new SecretKeySpec(new byte[]{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08}, "DES");
+                Cipher desCipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+
+                // Vulnerability 10: Using MD5 weak hash
+                MessageDigest md5Digest = MessageDigest.getInstance("MD5");
+                md5Digest.update(plaintext.getBytes());
+
+                // Vulnerability 11: NullCipher - ciphertext identical to plaintext
+                NullCipher nullCipher = new NullCipher();
+                byte[] nullEncrypted = nullCipher.doFinal(plaintext.getBytes());
 
                 Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
                 cipher.init(Cipher.ENCRYPT_MODE, keySpec1, ivSpec);
